@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -34,6 +35,25 @@ class MainActivity : AppCompatActivity() {
         val actionBarDrawerToggle = ActionBarDrawerToggle(this@MainActivity, drawerLayout, R.string.open_drawer, R.string.close_drawer)
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
+
+        navigationView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.dashboard -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.frame, DashboardFragment()).commit()
+                    drawerLayout.closeDrawers()
+                }
+                R.id.favourites -> {
+                    Toast.makeText(this@MainActivity, "Clicked on Favourites", Toast.LENGTH_SHORT).show()
+                }
+                R.id.profile -> {
+                    Toast.makeText(this@MainActivity, "Clicked on Profile", Toast.LENGTH_SHORT).show()
+                }
+                R.id.aboutApp -> {
+                    Toast.makeText(this@MainActivity, "Clicked on About App", Toast.LENGTH_SHORT).show()
+                }
+            }
+            return@setNavigationItemSelectedListener true
+        }
     }
 
     private fun setUpToolBar(){
