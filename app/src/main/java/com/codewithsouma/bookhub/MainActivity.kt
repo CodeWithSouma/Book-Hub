@@ -96,9 +96,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun startDashboardFragment() {
         startFragment("Dashboard", DashboardFragment())
-//        val currentItem = navigationView.menu.getItem(0)
-//        currentItem.isChecked = true
-//        previousMenuItem = currentItem
         navigationView.setCheckedItem(R.id.dashboard)
     }
 
