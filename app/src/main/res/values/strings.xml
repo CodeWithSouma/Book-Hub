@@ -12,4 +12,5 @@
     <string name="dashboard_fragment">Dashboard Fragment</string>
     <string name="favourite_fragment">Favourite Fragment</string>
     <string name="about_app_fragment">About App</string>
+    <string name="profile_fragment">Profile Fragment</string>
 </resources>

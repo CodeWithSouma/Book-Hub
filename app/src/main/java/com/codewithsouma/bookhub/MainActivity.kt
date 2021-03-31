@@ -47,12 +47,12 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawers()
                 }
                 R.id.profile -> {
-                    Toast.makeText(this@MainActivity, "Clicked on Profile", Toast.LENGTH_SHORT).show()
+                    supportFragmentManager.beginTransaction().replace(R.id.frame,ProfileFragment()).commit()
+                    drawerLayout.closeDrawers()
                 }
                 R.id.aboutApp -> {
                     supportFragmentManager.beginTransaction().replace(R.id.frame,AboutAppFragment()).commit()
                     drawerLayout.closeDrawers()
-
                 }
             }
             return@setNavigationItemSelectedListener true
