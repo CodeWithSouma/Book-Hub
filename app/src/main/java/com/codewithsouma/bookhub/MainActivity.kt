@@ -43,7 +43,8 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawers()
                 }
                 R.id.favourites -> {
-                    Toast.makeText(this@MainActivity, "Clicked on Favourites", Toast.LENGTH_SHORT).show()
+                    supportFragmentManager.beginTransaction().replace(R.id.frame, FavouriteFragment()).commit()
+                    drawerLayout.closeDrawers()
                 }
                 R.id.profile -> {
                     Toast.makeText(this@MainActivity, "Clicked on Profile", Toast.LENGTH_SHORT).show()
