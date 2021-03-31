@@ -32,26 +32,43 @@ class MainActivity : AppCompatActivity() {
 
         setUpToolBar()
 
-        val actionBarDrawerToggle = ActionBarDrawerToggle(this@MainActivity, drawerLayout, R.string.open_drawer, R.string.close_drawer)
+        val actionBarDrawerToggle = ActionBarDrawerToggle(
+            this@MainActivity,
+            drawerLayout,
+            R.string.open_drawer,
+            R.string.close_drawer
+        )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
 
         navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.dashboard -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.frame, DashboardFragment()).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame, DashboardFragment())
+                        .addToBackStack("Dashboard")
+                        .commit()
                     drawerLayout.closeDrawers()
                 }
                 R.id.favourites -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.frame, FavouriteFragment()).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame, FavouriteFragment())
+                        .addToBackStack("Favourites")
+                        .commit()
                     drawerLayout.closeDrawers()
                 }
                 R.id.profile -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.frame,ProfileFragment()).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame, ProfileFragment())
+                        .addToBackStack("Profile")
+                        .commit()
                     drawerLayout.closeDrawers()
                 }
                 R.id.aboutApp -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.frame,AboutAppFragment()).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame, AboutAppFragment())
+                        .addToBackStack("About App")
+                        .commit()
                     drawerLayout.closeDrawers()
                 }
             }
@@ -59,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpToolBar(){
+    private fun setUpToolBar() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Toolbar Title"
         supportActionBar?.setHomeButtonEnabled(true)
