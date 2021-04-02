@@ -1,4 +1,4 @@
-package com.codewithsouma.bookhub
+package com.codewithsouma.bookhub.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +10,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.codewithsouma.bookhub.*
+import com.codewithsouma.bookhub.fragment.AboutAppFragment
+import com.codewithsouma.bookhub.fragment.DashboardFragment
+import com.codewithsouma.bookhub.fragment.FavouriteFragment
+import com.codewithsouma.bookhub.fragment.ProfileFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
