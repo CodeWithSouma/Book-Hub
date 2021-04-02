@@ -35,7 +35,7 @@ class DashboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
         recyclerDashboard = view.findViewById(R.id.recyclerDashboard)
         layoutManager = LinearLayoutManager(activity)
         recyclerAdapter = DashboardRecyclerAdapter(activity as Context, bookInfoList)

@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.codewithsouma.bookhub.R
 import com.codewithsouma.bookhub.model.Book
 
-class DashboardRecyclerAdapter(val context:Context, private val itemList: ArrayList<Book>) : RecyclerView.Adapter<DashboardRecyclerAdapter.DashboardViewHolder>(){
+class DashboardRecyclerAdapter(private val context:Context, private val itemList: ArrayList<Book>) : RecyclerView.Adapter<DashboardRecyclerAdapter.DashboardViewHolder>(){
 
     class DashboardViewHolder(view: View): RecyclerView.ViewHolder(view){
         val bookName: TextView = view.findViewById(R.id.txtBookName)
@@ -19,6 +21,7 @@ class DashboardRecyclerAdapter(val context:Context, private val itemList: ArrayL
         val bookPrice: TextView = view.findViewById(R.id.txtBookPrice)
         val bookRating: TextView = view.findViewById(R.id.txtBookRating)
         val bookImage: ImageView = view.findViewById(R.id.imgBookImage)
+        val llContent: LinearLayout = view.findViewById(R.id.llContent)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
@@ -33,6 +36,10 @@ class DashboardRecyclerAdapter(val context:Context, private val itemList: ArrayL
         holder.bookPrice.text = book.bookCost
         holder.bookRating.text = book.bookRating
         holder.bookImage.setImageResource(book.bookImage)
+
+        holder.llContent.setOnClickListener {
+            Toast.makeText(context, "Clicked on ${holder.bookName.text}",Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun getItemCount(): Int {
