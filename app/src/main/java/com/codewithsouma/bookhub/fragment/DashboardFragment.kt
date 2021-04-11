@@ -13,6 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -26,11 +28,14 @@ import com.codewithsouma.bookhub.R
 import com.codewithsouma.bookhub.adapter.DashboardRecyclerAdapter
 import com.codewithsouma.bookhub.model.Book
 import com.codewithsouma.bookhub.util.ConnectionManager
+import org.json.JSONException
 
 class DashboardFragment : Fragment() {
     lateinit var recyclerDashboard: RecyclerView
     lateinit var layoutManager: RecyclerView.LayoutManager
-//    lateinit var checkInternetButton: Button
+    lateinit var progressLayout: RelativeLayout
+    lateinit var progressBar: ProgressBar
+
     private val bookInfoList = arrayListOf<Book>()
 
     lateinit var recyclerAdapter: DashboardRecyclerAdapter
@@ -41,33 +46,21 @@ class DashboardFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
         recyclerDashboard = view.findViewById(R.id.recyclerDashboard)
-//        checkInternetButton = view.findViewById(R.id.btnCheckInternet)
-//        checkInternetButton.setOnClickListener {
-//            if (ConnectionManager().checkConnectivity(activity as Context)) {
-//                //Internet is available
-//                val dialog = AlertDialog.Builder(activity as Context)
-//                dialog.setTitle("Success")
-//                dialog.setMessage("Internet Connection Found")
-//                dialog.setPositiveButton("Ok") { text, listener ->
-//                    // do nothing
-//                }
-//                dialog.setNegativeButton("Cancel") { text, listener ->
-//                    // do nothing
-//                }
-//                dialog.create()
-//                dialog.show()
-//
-//            } else {
-//                //Internet is not available
-//
-//            }
-            layoutManager = LinearLayoutManager(activity)
+        progressLayout = view.findViewById(R.id.progressLayout)
+        progressBar = view.findViewById(R.id.progressBar)
 
-            val queue = Volley.newRequestQueue(activity as Context)
-            val url = "http://13.235.250.119/v1/book/fetch_books"
-            if (ConnectionManager().checkConnectivity(activity as Context)) {
-                val jsonObjectRequest =
-                    object : JsonObjectRequest(Request.Method.GET, url, null, Response.Listener {
+        progressLayout.visibility = View.VISIBLE
+
+        layoutManager = LinearLayoutManager(activity)
+
+        val queue = Volley.newRequestQueue(activity as Context)
+        val url = "http://13.235.250.119/v1/book/fetch_books"
+        if (ConnectionManager().checkConnectivity(activity as Context)) {
+            val jsonObjectRequest =
+                object : JsonObjectRequest(Request.Method.GET, url, null, Response.Listener {
+                    try {
+                        progressLayout.visibility = View.GONE
+
                         val success = it.getBoolean("success")
                         if (success) {
                             val data = it.getJSONArray("data")
@@ -86,12 +79,6 @@ class DashboardFragment : Fragment() {
                                     DashboardRecyclerAdapter(activity as Context, bookInfoList)
                                 recyclerDashboard.adapter = recyclerAdapter
                                 recyclerDashboard.layoutManager = layoutManager
-                                recyclerDashboard.addItemDecoration(
-                                    DividerItemDecoration(
-                                        recyclerDashboard.context,
-                                        (layoutManager as LinearLayoutManager).orientation
-                                    )
-                                )
 
                             }
                         } else
@@ -100,36 +87,45 @@ class DashboardFragment : Fragment() {
                                 " Some Error Occurred!!",
                                 Toast.LENGTH_SHORT
                             ).show()
-
-                    }, Response.ErrorListener {
-                        // here we handel the errors
-                    }) {
-                        override fun getHeaders(): MutableMap<String, String> {
-                            val headers = HashMap<String, String>()
-                            headers["Content-type"] = "application/json"
-                            headers["token"] = "bf4bdd304c6713"
-                            return headers
-                        }
+                    } catch (ex: JSONException) {
+                        Toast.makeText(
+                            activity as Context,
+                            "Some unexpected error occurred!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
 
-                queue.add(jsonObjectRequest)
-            } else {
-                val dialog = AlertDialog.Builder(activity as Context)
-                dialog.setTitle("Success")
-                dialog.setMessage("Internet Connection is not Found")
-                dialog.setPositiveButton("Open settings") { text, listener ->
-                    var settingIntent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
-                    startActivity(settingIntent)
-                    activity?.finish()
+                }, Response.ErrorListener {
+                    Toast.makeText(
+                        activity as Context,
+                        "Volley error occurred!!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val headers = HashMap<String, String>()
+                        headers["Content-type"] = "application/json"
+                        headers["token"] = "bf4bdd304c6713"
+                        return headers
+                    }
                 }
-                dialog.setNegativeButton("Exit") { text, listener ->
-                    ActivityCompat.finishAffinity(activity as Activity)
-                }
-                dialog.create()
-                dialog.show()
-            }
-//        }
 
+            queue.add(jsonObjectRequest)
+        } else {
+            val dialog = AlertDialog.Builder(activity as Context)
+            dialog.setTitle("Success")
+            dialog.setMessage("Internet Connection is not Found")
+            dialog.setPositiveButton("Open settings") { text, listener ->
+                var settingIntent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
+                startActivity(settingIntent)
+                activity?.finish()
+            }
+            dialog.setNegativeButton("Exit") { text, listener ->
+                ActivityCompat.finishAffinity(activity as Activity)
+            }
+            dialog.create()
+            dialog.show()
+        }
 
         return view
     }
