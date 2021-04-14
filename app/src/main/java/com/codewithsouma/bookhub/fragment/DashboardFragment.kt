@@ -8,10 +8,8 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
@@ -29,6 +27,9 @@ import com.codewithsouma.bookhub.adapter.DashboardRecyclerAdapter
 import com.codewithsouma.bookhub.model.Book
 import com.codewithsouma.bookhub.util.ConnectionManager
 import org.json.JSONException
+import java.util.*
+import kotlin.Comparator
+import kotlin.collections.HashMap
 
 class DashboardFragment : Fragment() {
     lateinit var recyclerDashboard: RecyclerView
@@ -37,6 +38,13 @@ class DashboardFragment : Fragment() {
     lateinit var progressBar: ProgressBar
 
     private val bookInfoList = arrayListOf<Book>()
+    var ratingComparator = Comparator<Book>{ book1, book2 ->
+       if (book1.bookRating.compareTo(book2.bookRating) == 0){
+           book1.bookName.compareTo(book2.bookName,true)
+       }else{
+           book1.bookRating.compareTo(book2.bookRating,true)
+       }
+    }
 
     lateinit var recyclerAdapter: DashboardRecyclerAdapter
 
@@ -45,6 +53,7 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        setHasOptionsMenu(true)
         recyclerDashboard = view.findViewById(R.id.recyclerDashboard)
         progressLayout = view.findViewById(R.id.progressLayout)
         progressBar = view.findViewById(R.id.progressBar)
@@ -132,6 +141,20 @@ class DashboardFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_dashboard,menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_sort){
+            Collections.sort(bookInfoList, ratingComparator)
+            bookInfoList.reverse()
+        }
+        recyclerAdapter.notifyDataSetChanged()
+
+        return super.onOptionsItemSelected(item)
     }
 
 }
