@@ -72,6 +72,7 @@
             android:padding="4dp"
             android:text="4.5"
             android:textColor="#ffca28"
+            android:drawableTint="#ffca28"
             android:textSize="15sp"
             android:textStyle="bold" />
 

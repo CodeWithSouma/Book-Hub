@@ -75,10 +75,12 @@ class DashboardFragment : Fragment() {
                                     bookJsonObject.getString("image")
                                 )
                                 bookInfoList.add(bookObject)
-                                recyclerAdapter =
-                                    DashboardRecyclerAdapter(activity as Context, bookInfoList)
-                                recyclerDashboard.adapter = recyclerAdapter
-                                recyclerDashboard.layoutManager = layoutManager
+                               if (activity != null) {
+                                    recyclerAdapter =
+                                        DashboardRecyclerAdapter(activity as Context, bookInfoList)
+                                    recyclerDashboard.adapter = recyclerAdapter
+                                    recyclerDashboard.layoutManager = layoutManager
+                                }
 
                             }
                         } else
@@ -96,11 +98,13 @@ class DashboardFragment : Fragment() {
                     }
 
                 }, Response.ErrorListener {
-                    Toast.makeText(
-                        activity as Context,
-                        "Volley error occurred!!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if (activity != null) {
+                        Toast.makeText(
+                            activity as Context,
+                            "Volley error occurred!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }) {
                     override fun getHeaders(): MutableMap<String, String> {
                         val headers = HashMap<String, String>()
